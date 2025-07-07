@@ -1,4 +1,4 @@
-import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "../models/user.model.js"
+import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateProfilePicService, updateUserService } from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 //standardized response function
@@ -55,6 +55,17 @@ export const deleteUser=async (req,res ,next)=>{
         if(!deletedUser) return handleResponse(res,404,"user not found")
         handleResponse(res,201,"user deleted successfully",deletedUser)
     } catch (error) {
+        next(error)
+    }
+}
+export const updateProfilePicture=async (req,res,next)=>{
+    try{
+        const avatarLocalPath=req.file.path
+        const avatar=await uploadOnCloudinary(avatarLocalPath)
+        const updateProfile=await updateProfilePicService(req.params.id,avatar.url)
+        if(!updateProfile) return handleResponse(res,404,"user not found")
+        handleResponse(res,200,"profile pic updated successfully",updateProfile)
+    }catch(error){
         next(error)
     }
 }

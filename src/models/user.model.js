@@ -21,3 +21,7 @@ export const deleteUserService=async(id)=>{
     const result=await pool.query("delete from users where id=$1 returning *",[id])
     return result.rows[0]
 }
+export const updateProfilePicService=async (id,profile_url)=>{
+    const result =await pool.query("update users set profile_url=$1 where id=$2 returning *",[profile_url,id])
+    return result
+}
