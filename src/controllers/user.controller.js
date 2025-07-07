@@ -1,4 +1,5 @@
 import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "../models/user.model.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 //standardized response function
 const handleResponse=(res,status,message,data=null)=>{
@@ -12,8 +13,10 @@ const handleResponse=(res,status,message,data=null)=>{
 }
 export const createUser=async (req,res ,next)=>{
     const {name,email}=req.body
+    const avatarLocalPath=req.file.path 
     try {
-        const newUser=await createUserService(name,email)
+        const profile_image=await uploadOnCloudinary(avatarLocalPath)
+        const newUser=await createUserService(name,email,profile_image.url)
         return handleResponse(res,201,"user created successfully",newUser)
     } catch (error) {
         next(error)

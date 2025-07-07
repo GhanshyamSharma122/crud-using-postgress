@@ -10,7 +10,11 @@ const app=express()
 const port =process.env.PORT||8080
 //middlewares
 app.use(express.json());
+
 app.use (cors());
+app.use(express.urlencoded())
+app.use(express.static("public"))
+
 //routes
 app.use("/api",userRouter)
 //error handling middleware
